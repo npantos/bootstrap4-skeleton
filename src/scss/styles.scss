@@ -1,5 +1,6 @@
 $primary: #007bff;
 $primary-darken: #005cbf;
+
 nav {
   /** Bootstrap **/
   .dropdown:hover > .dropdown-menu {
@@ -31,12 +32,14 @@ nav {
 
   ul {
     display: block;
+
     li {
-      &.nav-close,&.nav-back {
+      &.nav-close, &.nav-back {
         a {
           background: $primary-darken;
           border: none;
-          &:hover{
+
+          &:hover {
             background: $primary-darken;
           }
         }
