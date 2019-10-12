@@ -1,0 +1,58 @@
+$primary: #007bff;
+$primary-darken: #005cbf;
+nav {
+  /** Bootstrap **/
+  .dropdown:hover > .dropdown-menu {
+    display: block;
+  }
+}
+
+/** HC Offset menu */
+.hc-nav-trigger {
+  position: relative;
+  top: initial;
+
+  span {
+    background: #fff;
+
+    &:before, &:after {
+      background: #fff;
+    }
+  }
+}
+
+.hc-offcanvas-nav {
+  background: $primary;
+
+
+  ul, .nav-container, .nav-wrapper {
+    background: $primary;
+  }
+
+  ul {
+    display: block;
+    li {
+      &.nav-close,&.nav-back {
+        a {
+          background: $primary-darken;
+          border: none;
+          &:hover{
+            background: $primary-darken;
+          }
+        }
+      }
+    }
+  }
+
+  a {
+    border-bottom: none;
+    padding: 17px;
+  }
+
+  .nav-item {
+    border-bottom: none;
+  }
+}
+
+
+

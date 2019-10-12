@@ -1,0 +1,32 @@
+{
+  "name": "bootstrap4-skeleton",
+  "author": "Nemanja Pantoš",
+  "version": "1.0.0",
+  "description": "Skeleton Bootstrap 4",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BlackrockDigital/startbootstrap-bare.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "hc-offcanvas-nav": "^3.4.1"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.11.2",
+    "bootstrap": "^4.3.1",
+    "browser-sync": "^2.26.7",
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.2.0",
+    "gulp-cli": "^2.2.0",
+    "gulp-flatten": "^0.4.0",
+    "gulp-minify": "^3.1.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-uglify-es": "^1.0.4",
+    "gulp-util": "^3.0.8",
+    "jquery": "^3.4.1",
+    "merge-stream": "^2.0.0",
+    "popper.js": "^1.14.7"
+  }
+}
