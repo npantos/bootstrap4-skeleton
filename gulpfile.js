@@ -28,6 +28,14 @@ function browserSyncReload(done) {
     done();
 }
 
+// BrowserSync with timeout
+function browserSyncReloadTimeout(done) {
+    setTimeout(function () {
+        browsersync.reload();
+    }, 4000);
+    done();
+}
+
 // Clean src folder
 function clean() {
     return del([
@@ -56,6 +64,13 @@ function modules() {
     ])
         .pipe(gulp.dest('./src/js/jquery'));
 
+    // Popper
+    let popper = gulp.src([
+        './node_modules/popper.js/dist/umd/*',
+        '!./node_modules/jquery/dist/popper-utils.js'
+    ])
+        .pipe(gulp.dest('./src/js/bootstrap'));
+
     // HC Offcanvas Nav CSS
     let hcCSS = gulp.src([
         './node_modules/hc-offcanvas-nav/src/scss/*',
@@ -68,23 +83,17 @@ function modules() {
     ])
         .pipe(gulp.dest('./src/js/hc-offcanvas-nav'));
 
-    // Fontawesome
-    let fontawesome = gulp.src([
-        './node_modules/@fortawesome/fontawesome-free/scss/*'
+    // Autocomplete JS lib
+    let autocompleteJS = gulp.src([
+        'node_modules/@tarekraafat/autocomplete.js/dist/js/autoComplete.js'
     ])
-        .pipe(gulp.dest('./src/scss/fontawesome'));
+        .pipe(gulp.dest('./src/js/autocomplete'));
 
-    // Fontawesome Fonts
-    let fontawesomeFonts = gulp.src([
-        './node_modules/@fortawesome/fontawesome-free/webfonts/*'
-    ])
-        .pipe(gulp.dest('./webfonts'));
-
-    return merge(bootstrapCSS, bootstrapJS, jquery, hcJS, hcCSS, fontawesome);
+    return merge(bootstrapCSS, bootstrapJS, jquery, hcJS, hcCSS, autocompleteJS);
 }
 
-function min() {
-    let style = gulp.src('./src/scss/**/*.scss')
+function minCSS() {
+    return gulp.src('./src/scss/**/*.*css')
         .pipe(sass().on('error', sass.logError))
         .pipe(cleanCSS({compatibility: 'ie8'}))
         .pipe(rename({
@@ -92,8 +101,11 @@ function min() {
         }))
         .pipe(flatten())
         .pipe(gulp.dest('./css'));
+}
 
-    let scripts = gulp.src(['src/js/**/*.js', '!src/js/**/*.min.js'])
+function minJS() {
+
+    return gulp.src(['src/js/**/*.js', '!src/js/**/*.min.js'])
         .pipe(uglify({mangle: false}))
         .pipe(flatten())
         .pipe(rename({
@@ -101,17 +113,17 @@ function min() {
         }))
         .pipe(gulp.dest('./js'))
     ;
-    return merge(style, scripts);
 }
 
 // Watch files
 function watchFiles() {
-    gulp.watch("./**/*.scss", gulp.parallel(min, browserSyncReload));
-    gulp.watch("./**/*.html", gulp.parallel(min, browserSyncReload));
+    gulp.watch("./**/*.scss", gulp.parallel(minCSS, browserSyncReload));
+    gulp.watch("./src/**/*.js", gulp.parallel(minJS, browserSyncReloadTimeout));
+    gulp.watch("./**/*.html", gulp.parallel(browserSyncReload));
 }
 
 // Define complex tasks
-const src = gulp.series(clean, modules, min);
+const src = gulp.series(modules, minCSS, minJS);
 const build = gulp.series(src);
 const watch = gulp.series(gulp.parallel(watchFiles, browserSync));
 
@@ -120,4 +132,4 @@ exports.clean = clean;
 exports.src = src;
 exports.build = build;
 exports.watch = watch;
-exports.default = build;
+exports.default = watch;
