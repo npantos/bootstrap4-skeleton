@@ -9,10 +9,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@tarekraafat/autocomplete.js": "^7.1.0",
-    "hc-offcanvas-nav": "^3.4.1",
-    "ion-rangeslider": "^2.3.0",
-    "popper.js": "^1.16.0"
+    "hc-offcanvas-nav": "^3.4.1"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.11.2",
@@ -29,6 +26,7 @@
     "gulp-uglify-es": "^1.0.4",
     "gulp-util": "^3.0.8",
     "jquery": "^3.4.1",
-    "merge-stream": "^2.0.0"
+    "merge-stream": "^2.0.0",
+    "popper.js": "^1.14.7"
   }
 }

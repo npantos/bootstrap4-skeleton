@@ -28,14 +28,6 @@ function browserSyncReload(done) {
     done();
 }
 
-// BrowserSync with timeout
-function browserSyncReloadTimeout(done) {
-    setTimeout(function () {
-        browsersync.reload();
-    }, 4000);
-    done();
-}
-
 // Clean src folder
 function clean() {
     return del([
@@ -64,13 +56,6 @@ function modules() {
     ])
         .pipe(gulp.dest('./src/js/jquery'));
 
-    // Popper
-    let popper = gulp.src([
-        './node_modules/popper.js/dist/umd/*',
-        '!./node_modules/jquery/dist/popper-utils.js'
-    ])
-        .pipe(gulp.dest('./src/js/bootstrap'));
-
     // HC Offcanvas Nav CSS
     let hcCSS = gulp.src([
         './node_modules/hc-offcanvas-nav/src/scss/*',
@@ -83,17 +68,23 @@ function modules() {
     ])
         .pipe(gulp.dest('./src/js/hc-offcanvas-nav'));
 
-    // Autocomplete JS lib
-    let autocompleteJS = gulp.src([
-        'node_modules/@tarekraafat/autocomplete.js/dist/js/autoComplete.js'
+    // Fontawesome
+    let fontawesome = gulp.src([
+        './node_modules/@fortawesome/fontawesome-free/scss/*'
     ])
-        .pipe(gulp.dest('./src/js/autocomplete'));
+        .pipe(gulp.dest('./src/scss/fontawesome'));
 
-    return merge(bootstrapCSS, bootstrapJS, jquery, hcJS, hcCSS, autocompleteJS);
+    // Fontawesome Fonts
+    let fontawesomeFonts = gulp.src([
+        './node_modules/@fortawesome/fontawesome-free/webfonts/*'
+    ])
+        .pipe(gulp.dest('./webfonts'));
+
+    return merge(bootstrapCSS, bootstrapJS, jquery, hcJS, hcCSS, fontawesome);
 }
 
-function minCSS() {
-    return gulp.src('./src/scss/**/*.*css')
+function min() {
+    let style = gulp.src('./src/scss/**/*.scss')
         .pipe(sass().on('error', sass.logError))
         .pipe(cleanCSS({compatibility: 'ie8'}))
         .pipe(rename({
@@ -101,11 +92,8 @@ function minCSS() {
         }))
         .pipe(flatten())
         .pipe(gulp.dest('./css'));
-}
 
-function minJS() {
-
-    return gulp.src(['src/js/**/*.js', '!src/js/**/*.min.js'])
+    let scripts = gulp.src(['src/js/**/*.js', '!src/js/**/*.min.js'])
         .pipe(uglify({mangle: false}))
         .pipe(flatten())
         .pipe(rename({
@@ -113,17 +101,17 @@ function minJS() {
         }))
         .pipe(gulp.dest('./js'))
     ;
+    return merge(style, scripts);
 }
 
 // Watch files
 function watchFiles() {
-    gulp.watch("./**/*.scss", gulp.parallel(minCSS, browserSyncReload));
-    gulp.watch("./src/**/*.js", gulp.parallel(minJS, browserSyncReloadTimeout));
-    gulp.watch("./**/*.html", gulp.parallel(browserSyncReload));
+    gulp.watch("./**/*.scss", gulp.parallel(min, browserSyncReload));
+    gulp.watch("./**/*.html", gulp.parallel(min, browserSyncReload));
 }
 
 // Define complex tasks
-const src = gulp.series(modules, minCSS, minJS);
+const src = gulp.series(clean, modules, min);
 const build = gulp.series(src);
 const watch = gulp.series(gulp.parallel(watchFiles, browserSync));
 
@@ -132,4 +120,4 @@ exports.clean = clean;
 exports.src = src;
 exports.build = build;
 exports.watch = watch;
-exports.default = watch;
+exports.default = build;
